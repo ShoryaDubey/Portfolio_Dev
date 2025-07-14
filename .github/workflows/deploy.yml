@@ -1,0 +1,44 @@
+name: Test-Build-Deploy
+
+on: 
+    push:
+        branches: 
+            - "main"
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+        permissions: 
+            contents: read
+       
+        env:
+            MONGODB_CONNECTION_PROTOCOL: mongodb
+            MONGODB_CLUSTER_ADDRESS: mongodb
+            MONGODB_USERNAME: root
+            MONGODB_PASSWORD: example
+            PORT: 8080
+        services:
+            mongodb:
+                image: mongo:6.0
+                env: 
+                    MONGO_INITDB_ROOT_USERNAME: root
+                    MONGO_INITDB_ROOT_PASSWORD: example
+            
+        steps:
+        - uses: actions/checkout@v4
+
+        - name: Install dependencies
+          run: npm ci
+
+        - name: Install wait-on
+          run: npm install -g wait-on
+
+        - name: Start backend server in background
+          run: |
+            npm start &
+            wait-on http://localhost:8080   
+
+        - name: Run tests
+          run: npm test 
+            
+     
