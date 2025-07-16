@@ -1,44 +1,46 @@
-name: Test-Build-Deploy
+name: Java CI with Maven + SonarQube
 
-on: 
-    push:
-        branches: 
-            - "main"
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  id-token: write
 
 jobs:
-    test:
-        runs-on: ubuntu-latest
-        permissions: 
-            contents: read
-       
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Cache Maven packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+
+      - name: Build with Maven
+        run: mvn clean install
+
+      - name: Run Checkstyle
+        run: mvn validate checkstyle:check
+
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@<action version> # Ex: v4.1.0, See the latest version at https://github.com/marketplace/actions/official-sonarqube-scan
         env:
-            MONGODB_CONNECTION_PROTOCOL: mongodb
-            MONGODB_CLUSTER_ADDRESS: mongodb
-            MONGODB_USERNAME: root
-            MONGODB_PASSWORD: example
-            PORT: 8080
-        services:
-            mongodb:
-                image: mongo:6.0
-                env: 
-                    MONGO_INITDB_ROOT_USERNAME: root
-                    MONGO_INITDB_ROOT_PASSWORD: example
-            
-        steps:
-        - uses: actions/checkout@v4
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL }}
 
-        - name: Install dependencies
-          run: npm ci
-
-        - name: Install wait-on
-          run: npm install -g wait-on
-
-        - name: Start backend server in background
-          run: |
-            npm start &
-            wait-on http://localhost:8080   
-
-        - name: Run tests
-          run: npm test 
-            
-     
+      - name: Upload Test Report
+        uses: dorny/test-reporter@v1
+        with:
+          name: JUnit Tests
+          path: '**/target/surefire-reports/*.xml'
+          reporter: java-junit
