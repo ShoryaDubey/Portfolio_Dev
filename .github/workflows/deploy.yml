@@ -44,6 +44,7 @@ jobs:
             -Dsonar.projectKey=ShoryaDubey_Portfolio_Dev
             -Dsonar.projectName=Portfolio_Dev
             -Dsonar.sources=.
+            -Dsonar.java.binaries=target/classes
 
 
       - name: Upload Test Report
