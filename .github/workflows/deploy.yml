@@ -40,8 +40,8 @@ jobs:
           SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL }}
         with:
           args: >
-            -Dsonar.projectKey=java-mvn-project
-            -Dsonar.projectName=MyJavaProject
+            -Dsonar.projectKey=ShoryaDubey_Portfolio_Dev
+            -Dsonar.projectName=Portfolio_Dev
             -Dsonar.sources=.
 
       - name: Upload Test Report
