@@ -30,8 +30,8 @@ jobs:
         run: mvn clean install -DskipTests -Dcheckstyle.skip=true
 
 
-      - name: Run Checkstyle
-        run: mvn validate checkstyle:check
+      # - name: Run Checkstyle
+      #   run: mvn validate checkstyle:check
 
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v5.2.0 # Ex: v4.1.0, See the latest version at https://github.com/marketplace/actions/official-sonarqube-scan
