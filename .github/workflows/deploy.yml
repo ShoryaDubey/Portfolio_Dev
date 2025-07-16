@@ -44,7 +44,7 @@ jobs:
             -Dsonar.projectKey=ShoryaDubey_Portfolio_Dev
             -Dsonar.projectName=Portfolio_Dev
             -Dsonar.sources=.
-            -Dsonar.tests=src/test/
+
 
       - name: Upload Test Report
         uses: dorny/test-reporter@v1
