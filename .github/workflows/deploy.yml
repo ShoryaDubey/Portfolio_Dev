@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   build:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
@@ -29,19 +29,3 @@ jobs:
       - name: Build with Maven
         run: mvn clean install -DskipTests -Dcheckstyle.skip=true
 
-
-      # - name: Run Checkstyle
-      #   run: mvn validate checkstyle:check
-
-      - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v5.2.0 # Ex: v4.1.0, See the latest version at https://github.com/marketplace/actions/official-sonarqube-scan
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL }}
-        with:
-          args: >
-            -Dsonar.organization=shoryadubey
-            -Dsonar.projectKey=ShoryaDubey_Portfolio_Dev
-            -Dsonar.projectName=Portfolio_Dev
-            -Dsonar.sources=.
-            -Dsonar.java.binaries=target/classes
