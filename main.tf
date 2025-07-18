@@ -59,7 +59,6 @@ resource "aws_launch_template" "app" {
   name_prefix   = "app-launch-template"
   image_id      = "ami-0150ccaf51ab55a51" 
   instance_type = "t2.micro"
-  security_group_names = aws_security_group.instance_sg.name
 
   network_interfaces {
     associate_public_ip_address = true
