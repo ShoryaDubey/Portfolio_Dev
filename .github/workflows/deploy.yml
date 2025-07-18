@@ -30,8 +30,8 @@ jobs:
 
       - name: Plane 
         run: |
-          terraform plan
           terraform init
+          terraform plan
           terraform apply
       
 
