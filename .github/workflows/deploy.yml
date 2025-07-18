@@ -2,17 +2,36 @@ name: Java CI with Maven + SonarQube
 
 on:
   push:
-    branches: ...
+    branches: 
+      - 'main'
   workflow_dispatch:
 permissions:
   contents: read
   id-token: write
+
+env:
+  ACCOUNT_ID: ${{ secrets.ACCOUNT_ID }}
+  ROLE_NAME: ${{ secrets.ROLE_NAME }}
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::${{ env.ACCOUNT_ID }}:role/${{ env.ROLE_NAME }}
+          aws-region: ap-south-1
 
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Plane 
+        run: |
+          terraform plane
+          terraform init
+          terraform apply
       
 
