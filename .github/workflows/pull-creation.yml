@@ -4,6 +4,12 @@ on:
   push: 
     branches:
       - 'dev'
+
+permissions:
+  contents: read
+  id-token: write
+
+
 env:
   ACCOUNT_ID: ${{ secrets.ACCOUNT_ID }}
   ROLE_NAME: ${{ secrets.ROLE_NAME }}
