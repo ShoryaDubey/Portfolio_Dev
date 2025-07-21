@@ -1,25 +1,15 @@
-name: Terraform apply infra
+name: Terraform PR Plan Check
 
-on:
-  pull_request_review:
-    types: [submitted]
+on: 
+  pull_request:
+    branches: ...
 
-  workflow_dispatch:
-permissions:
-  contents: read
-  id-token: write
-
-env:
-  ACCOUNT_ID: ${{ secrets.ACCOUNT_ID }}
-  ROLE_NAME: ${{ secrets.ROLE_NAME }}
-
-jobs:
-  build:
-    if: github.event.review.state == 'approved' && github.event.pull_request.base.ref == 'main'
+jobs: 
+  terraform-plan-check: 
     runs-on: ubuntu-latest
-    steps:
+    steps: 
       - uses: actions/checkout@v4
-      
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -31,7 +21,7 @@ jobs:
 
       - name: Plane 
         working-directory: ./infra
+
         run: |
           terraform init
-          terraform plan -auto-approve
-
+          terraform plan -no-color > plan.txt

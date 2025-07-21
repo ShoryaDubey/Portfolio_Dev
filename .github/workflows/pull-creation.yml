@@ -1,0 +1,77 @@
+name: Create Pull Request
+
+on: 
+  push: 
+    branches:
+      - 'dev'
+
+jobs:
+  validate-terraform:
+    runs-on: ubuntu-latest  
+    steps: 
+
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::${{ env.ACCOUNT_ID }}:role/${{ env.ROLE_NAME }}
+          aws-region: ap-south-1
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Plan
+        working-directory: ./infra
+        run: |
+          terraform init
+          terraform plan -no-color > plan.txt
+
+      - name: Upload Terraform Plan Output
+        uses: actions/upload-artifact@v4
+        with:
+          name: terraform-plan-output
+          path: ./infra/plan.txt
+
+  create-PR: 
+    permissions:
+      contents: write
+      pull-requests: write  
+    needs: validate-terraform
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Downlaod Plan text
+        uses: actions/download-artifact@v4
+        with: 
+          name: terraform-plan-output
+          path: ./infra/download
+      
+      - name: Create Pull Request with Plan Output
+        uses: peter-evans/create-pull-request@v5
+        with:
+          commit-message: "Terraform Plan for Infra Update"
+          title: "Terraform PR: Dev → Main"
+          body: |
+            ## Terraform Plan Output
+
+            ```
+            ${{ steps.plan.outputs.stdout }}
+            ```
+
+            Or see below:
+
+            ```
+            $(head -n 100 ./infra/download/plan.txt)
+            ```
+          committer: "${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>"
+          author: "${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>"
+
+          assignees: shoryadubey
+
+          labels: terraform-plan, infra, pending-approval
+          token: ${{ github.GITHUB_TOKEN }}
+
+          base: main
+          branch: dev
+
+
