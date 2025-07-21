@@ -54,7 +54,6 @@ resource "aws_security_group" "instance_sg" {
   }
 }
 
-# Launch Template for EC2 Instances
 resource "aws_launch_template" "app" {
   name_prefix   = "app-launch-template"
   image_id      = "ami-0150ccaf51ab55a51" 
@@ -66,7 +65,6 @@ resource "aws_launch_template" "app" {
   }
 }
 
-# Auto Scaling Group
 resource "aws_autoscaling_group" "app_asg" {
   desired_capacity    = 2
   max_size            = 4
