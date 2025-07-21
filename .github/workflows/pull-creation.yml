@@ -4,8 +4,6 @@ on:
   push: 
     branches:
       - 'dev'
-  workflow_dispatch:
-
 env:
   ACCOUNT_ID: ${{ secrets.ACCOUNT_ID }}
   ROLE_NAME: ${{ secrets.ROLE_NAME }}
