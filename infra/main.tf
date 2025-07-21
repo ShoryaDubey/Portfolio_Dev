@@ -55,7 +55,7 @@ resource "aws_security_group" "instance_sg" {
 }
 
 # Launch Template for EC2 Instances
-resource "aws_launch_template" "app" {
+resource "aws_launch_template" "application" {
   name_prefix   = "app-launch-template"
   image_id      = "ami-0150ccaf51ab55a51" 
   instance_type = "t2.micro"
