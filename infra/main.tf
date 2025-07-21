@@ -45,7 +45,6 @@ resource "aws_security_group" "instance_sg" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
-
   egress {
     from_port   = 0
     to_port     = 0
@@ -58,6 +57,7 @@ resource "aws_launch_template" "app" {
   name_prefix   = "app-launch-template"
   image_id      = "ami-0150ccaf51ab55a51" 
   instance_type = "t2.micro"
+  key_name      = "testting-key"
 
   network_interfaces {
     associate_public_ip_address = true
