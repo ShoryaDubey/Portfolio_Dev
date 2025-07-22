@@ -1,5 +1,5 @@
 data.aws_vpc.default: Reading...
-data.aws_vpc.default: Read complete after 1s [id=vpc-01012df591932316a]
+data.aws_vpc.default: Read complete after 0s [id=vpc-01012df591932316a]
 data.aws_subnets.default: Reading...
 data.aws_subnets.default: Read complete after 0s [id=us-east-1]
 
@@ -335,6 +335,7 @@ Plan: 9 to add, 0 to change, 0 to destroy.
 
 Changes to Outputs:
   + alb_dns_name = (known after apply)
+  + asg_name     = (known after apply)
 
 ─────────────────────────────────────────────────────────────────────────────
 
