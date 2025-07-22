@@ -1,8 +1,7 @@
 provider "aws" {
-  region = "us-east-1" # Change this to your preferred region
+  region = "us-east-1" 
 }
 
-# Get default VPC and its subnets
 data "aws_vpc" "default" {
   default = true
 }
@@ -12,29 +11,8 @@ data "aws_subnets" "default" {
     name   = "vpc-id"
     values = [data.aws_vpc.default.id]
   }
+  
 }
-
-# Security Group for ALB
-resource "aws_security_group" "alb_sg" {
-  name_prefix = "alb-sg"
-  vpc_id      = data.aws_vpc.default.id
-
-  ingress {
-    from_port   = var.server_port
-    to_port     = var.server_port
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-
-# Security Group for EC2 Instances
 resource "aws_security_group" "instance_sg" {
   name_prefix = "instance-sg"
   vpc_id      = data.aws_vpc.default.id
@@ -54,94 +32,16 @@ resource "aws_security_group" "instance_sg" {
   }
 }
 
-# Launch Template for EC2 Instances
-resource "aws_launch_template" "app" {
-  name_prefix   = "app-launch-template"
-  image_id      = "ami-0150ccaf51ab55a51" 
-  instance_type = "t2.micro"
+resource "aws_instance" "web" {
+  ami                         = "ami-0cbbe2c6a1bb2ad63"
+  instance_type               = "t2.micro"
+  key_name                    = "testing-key" 
+  monitoring                  = true
+  associate_public_ip_address = true
 
-  network_interfaces {
-    associate_public_ip_address = true
-    security_groups             = [aws_security_group.instance_sg.id]
+  vpc_security_group_ids      = [aws_security_group.instance_sg.id] 
+
+  tags = {
+    Name = "MyWebInstance"
   }
 }
-
-# Auto Scaling Group
-resource "aws_autoscaling_group" "app_asg" {
-  desired_capacity    = 2
-  max_size            = 4
-  min_size            = 2
-  vpc_zone_identifier = data.aws_subnets.default.ids
-
-  launch_template {
-    id      = aws_launch_template.app.id
-    version = "$Latest"
-  }
-
-  target_group_arns = [aws_lb_target_group.app_tg.arn]
-
-  tag {
-    key                 = "Name"
-    value               = "App-Instance"
-    propagate_at_launch = true
-  }
-
-  lifecycle {
-    create_before_destroy = true
-  }
-}
-
-# Auto Scaling Policies
-resource "aws_autoscaling_policy" "scale_up" {
-  name                   = "scale-up"
-  scaling_adjustment     = 1
-  adjustment_type        = "ChangeInCapacity"
-  cooldown               = 300
-  autoscaling_group_name = aws_autoscaling_group.app_asg.name
-}
-
-resource "aws_autoscaling_policy" "scale_down" {
-  name                   = "scale-down"
-  scaling_adjustment     = -1
-  adjustment_type        = "ChangeInCapacity"
-  cooldown               = 300
-  autoscaling_group_name = aws_autoscaling_group.app_asg.name
-}
-
-# Application Load Balancer (ALB)
-resource "aws_lb" "app_alb" {
-  name               = "app-load-balancer"
-  internal           = false
-  load_balancer_type = "application"
-  security_groups    = [aws_security_group.alb_sg.id]
-  subnets            = data.aws_subnets.default.ids
-}
-
-# Target Group for ALB
-resource "aws_lb_target_group" "app_tg" {
-  name     = "app-target-group"
-  port     = var.server_port
-  protocol = "HTTP"
-  vpc_id   = data.aws_vpc.default.id
-
-  health_check {
-    interval            = 30
-    path                = "/"
-    timeout             = 5
-    healthy_threshold   = 2
-    unhealthy_threshold = 2
-    matcher             = "200"
-  }
-}
-
-# ALB Listener to forward traffic to the Target Group
-resource "aws_lb_listener" "http" {
-  load_balancer_arn = aws_lb.app_alb.arn
-  port              = var.server_port
-  protocol          = "HTTP"
-  default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.app_tg.arn
-  }
-}
-
