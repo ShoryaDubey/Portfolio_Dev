@@ -47,6 +47,8 @@ jobs:
     needs: validate-terraform
     runs-on: ubuntu-latest
     steps: 
+      - uses: actions/checkout@v4
+      
       - name: Downlaod Plan text
         uses: actions/download-artifact@v4
         with: 
