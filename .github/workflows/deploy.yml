@@ -1,8 +1,9 @@
 name: Terraform apply infra
 
 on:
-  pull_request_review:
-    types: [submitted]
+  pull_request:
+    types:
+      - closed
 
   workflow_dispatch:
 permissions:
@@ -15,7 +16,6 @@ env:
 
 jobs:
   build:
-    if: github.event.review.state == 'approved'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
