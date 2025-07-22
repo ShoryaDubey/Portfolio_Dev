@@ -56,6 +56,7 @@ jobs:
       - name: Create Pull Request with Plan Output
         uses: peter-evans/create-pull-request@v5
         with:
+          token: ${{ github.token }}
           commit-message: "Terraform Plan for Infra Update"
           title: "Terraform PR: Dev → Main"
           body: |
@@ -74,8 +75,6 @@ jobs:
           author: "${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>"
 
           assignees: ShoryaDubey
-
-          token: ${{ github.GITHUB_TOKEN }}
 
           base: main
           branch: dev
