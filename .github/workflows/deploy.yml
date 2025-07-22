@@ -33,4 +33,4 @@ jobs:
         run: |
           terraform init
           terraform plan 
-          terraform destory -auto-approve
+          terraform destroy -auto-approve
