@@ -24,6 +24,13 @@ resource "aws_security_group" "instance_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  ingress {
+  from_port   = var.ssh_port
+  to_port     = var.ssh_port
+  protocol    = "tcp"
+  cidr_blocks = [var.my_ip]
+}
+
   egress {
     from_port   = 0
     to_port     = 0
@@ -43,5 +50,26 @@ resource "aws_instance" "web" {
 
   tags = {
     Name = "MyWebInstance"
+  }
+
+ connection {
+    type     = "ssh"
+    user     = "ubuntu"
+    private_key = file("~/.ssh/testing-key.pem")
+    host     = self.public_ip
+  }
+
+  provisioner "file" {
+    source = "flask-app"
+    destination = "/home/ubuntu/flask-app/"
+  }
+
+  provisioner "remote-exec" {
+    inline = [ 
+      "sudo apt update",
+      "sudo apt install python3-flask",
+      "sudo apt install gunicorn",
+      "gunicorn app:app --bind 0.0.0.0:8000"
+     ]
   }
 }
