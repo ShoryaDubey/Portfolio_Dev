@@ -11,7 +11,19 @@ permissions:
   id-token: write
 
 jobs:
+  testing: 
+    runs-on: ubuntu-latest
+    steps: 
+      - uses: actions/checkout@v4
+
+      - name: Adding Dependencies
+        run: |
+          sudo apt update
+          sudo apt install python3-flask
+          python3 test.py
+
   build:
+    needs: testing
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -33,4 +45,5 @@ jobs:
         run: |
           terraform init
           terraform plan 
-          terraform destroy -auto-approve
+          terraform apply -auto-approve
+
