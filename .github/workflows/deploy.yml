@@ -17,6 +17,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Adding Dependencies
+        working-directory: ./flask-app
         run: |
           sudo apt update
           sudo apt install python3-flask
