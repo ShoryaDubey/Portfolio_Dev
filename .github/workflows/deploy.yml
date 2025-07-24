@@ -12,12 +12,11 @@ permissions:
 
 jobs:
   testing: 
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps: 
       - uses: actions/checkout@v4
 
       - name: Adding Dependencies
-        working-directory: ./flask-app
         run: |
           sudo apt update
           sudo apt install -y python3-flask
@@ -25,7 +24,7 @@ jobs:
 
   build:
     needs: testing
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       
