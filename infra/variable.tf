@@ -14,4 +14,5 @@ variable "ssh_port" {
 variable "my_ip" {
   description = "your ip"
   type        = string
+  default = "124.30.138.121/32"
 }

@@ -1,7 +1,3 @@
-provider "aws" {
-  region = "us-east-1" 
-}
-
 data "aws_vpc" "default" {
   default = true
 }
@@ -13,6 +9,11 @@ data "aws_subnets" "default" {
   }
   
 }
+
+data "vault_generic_secret" "example" {
+  path = "ssh_ip/dev_ssh_ips"
+}
+
 resource "aws_security_group" "instance_sg" {
   name_prefix = "instance-sg"
   vpc_id      = data.aws_vpc.default.id
@@ -28,7 +29,7 @@ resource "aws_security_group" "instance_sg" {
   from_port   = var.ssh_port
   to_port     = var.ssh_port
   protocol    = "tcp"
-  cidr_blocks = [var.my_ip]
+  cidr_blocks = [data.vault_generic_secret.example.data["dev"]]
 }
 
   egress {
