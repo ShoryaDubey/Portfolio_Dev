@@ -20,7 +20,7 @@ jobs:
         working-directory: ./flask-app
         run: |
           sudo apt update
-          sudo apt install python3-flask
+          sudo apt install -y python3-flask
           python3 test.py
 
   build:
