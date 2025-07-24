@@ -1,33 +1,9 @@
 data.vault_generic_secret.example: Reading...
 data.vault_generic_secret.example: Read complete after 0s [id=ssh_ip/dev_ssh_ips]
-aws_security_group.alb_sg: Refreshing state... [id=sg-041f893732cc27c7d]
 data.aws_vpc.default: Reading...
-aws_launch_template.app: Refreshing state... [id=lt-080e1f1dabf112719]
-aws_lb_target_group.app_tg: Refreshing state... [id=arn:aws:elasticloadbalancing:us-east-1:355334485969:targetgroup/app-target-group/a7dc33494b866758]
-aws_autoscaling_group.app_asg: Refreshing state... [id=terraform-20250722083544912900000005]
 data.aws_vpc.default: Read complete after 0s [id=vpc-01012df591932316a]
 data.aws_subnets.default: Reading...
-aws_security_group.instance_sg: Refreshing state... [id=sg-0e663b4ca0021858d]
 data.aws_subnets.default: Read complete after 0s [id=us-east-1]
-
-Note: Objects have changed outside of Terraform
-
-Terraform detected the following changes made outside of Terraform since the
-last "terraform apply" which may have affected this plan:
-
-  # aws_security_group.instance_sg has been deleted
-  - resource "aws_security_group" "instance_sg" {
-      - id                     = "sg-0e663b4ca0021858d" -> null
-        name                   = "instance-sg20250722083536875100000002"
-        # (10 unchanged attributes hidden)
-    }
-
-
-Unless you have made equivalent changes to your configuration, or ignored the
-relevant attributes using ignore_changes, the following plan may include
-actions to undo or respond to these changes.
-
-─────────────────────────────────────────────────────────────────────────────
 
 Terraform used the selected providers to generate the following execution
 plan. Resource actions are indicated with the following symbols:
@@ -37,7 +13,7 @@ Terraform will perform the following actions:
 
   # aws_instance.web will be created
   + resource "aws_instance" "web" {
-      + ami                                  = "ami-0cbbe2c6a1bb2ad63"
+      + ami                                  = "ami-020cba7c55df1f615"
       + arn                                  = (known after apply)
       + associate_public_ip_address          = true
       + availability_zone                    = (known after apply)
