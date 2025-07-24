@@ -1,13 +1,13 @@
 data.vault_generic_secret.example: Reading...
 data.vault_generic_secret.example: Read complete after 0s [id=ssh_ip/dev_ssh_ips]
-aws_launch_template.app: Refreshing state... [id=lt-080e1f1dabf112719]
-data.aws_vpc.default: Reading...
-aws_autoscaling_group.app_asg: Refreshing state... [id=terraform-20250722083544912900000005]
-aws_lb_target_group.app_tg: Refreshing state... [id=arn:aws:elasticloadbalancing:us-east-1:355334485969:targetgroup/app-target-group/a7dc33494b866758]
 aws_security_group.alb_sg: Refreshing state... [id=sg-041f893732cc27c7d]
+data.aws_vpc.default: Reading...
+aws_launch_template.app: Refreshing state... [id=lt-080e1f1dabf112719]
+aws_lb_target_group.app_tg: Refreshing state... [id=arn:aws:elasticloadbalancing:us-east-1:355334485969:targetgroup/app-target-group/a7dc33494b866758]
+aws_autoscaling_group.app_asg: Refreshing state... [id=terraform-20250722083544912900000005]
 data.aws_vpc.default: Read complete after 0s [id=vpc-01012df591932316a]
-aws_security_group.instance_sg: Refreshing state... [id=sg-0e663b4ca0021858d]
 data.aws_subnets.default: Reading...
+aws_security_group.instance_sg: Refreshing state... [id=sg-0e663b4ca0021858d]
 data.aws_subnets.default: Read complete after 0s [id=us-east-1]
 
 Note: Objects have changed outside of Terraform
@@ -74,10 +74,10 @@ Terraform will perform the following actions:
       + spot_instance_request_id             = (known after apply)
       + subnet_id                            = (known after apply)
       + tags                                 = {
-          + "Name" = "MyWebInstance"
+          + "Name" = "Flask app"
         }
       + tags_all                             = {
-          + "Name" = "MyWebInstance"
+          + "Name" = "Flask app"
         }
       + tenancy                              = (known after apply)
       + user_data_base64                     = (known after apply)
