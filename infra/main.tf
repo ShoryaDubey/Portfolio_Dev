@@ -68,8 +68,8 @@ resource "aws_instance" "web" {
   provisioner "remote-exec" {
     inline = [ 
       "sudo apt update",
-      "sudo apt install python3-flask",
-      "sudo apt install gunicorn",
+      "sudo apt install -y python3-flask",
+      "sudo apt install -y gunicorn",
       "gunicorn app:app --bind 0.0.0.0:8000"
      ]
   }
