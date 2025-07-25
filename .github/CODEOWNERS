@@ -1,0 +1,6 @@
+# Set code owners per path
+# Format: <file/path> @github-username or @org/team
+
+*             @ShoryaDubey
+infra/*       @aws-infra-team
+.github/*     @devops-admins
